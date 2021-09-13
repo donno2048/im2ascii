@@ -81,9 +81,10 @@ window.onload = () => {
         document.getElementsByTagName("textarea")[0].value = output;
     }
 	document.getElementsByTagName("button")[0].onclick = () => {
-		const textarea = document.getElementsByTagName("textarea")[0];
-		textarea.select();
+		document.getElementsByTagName("textarea")[0].select();
 		document.execCommand('copy');
+    }
+    document.getElementsByTagName("button")[1].onclick = () => {
 		location.reload();
 	}
 }

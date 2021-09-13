@@ -1,3 +1,6 @@
+:not(div) {
+	height: 100%;
+}
 body {
 	background: #333;
 	color: #eee;
@@ -8,6 +11,8 @@ body {
 textarea {
 	flex: 1 1;
 	white-space: pre;
+	color: white;
+	background-color: #bbb;
 }
 #options {
 	flex-direction: column;
