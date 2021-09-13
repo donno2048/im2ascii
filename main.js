@@ -79,6 +79,7 @@ window.onload = () => {
             output += "\n";
         }
         document.getElementsByTagName("textarea")[0].value = output;
+        document.querySelector('input[type="file"]').value = null;
     }
 	document.getElementsByTagName("button")[0].onclick = () => {
 		document.getElementsByTagName("textarea")[0].select();
