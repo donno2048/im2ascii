@@ -81,11 +81,20 @@ window.onload = () => {
         document.getElementsByTagName("textarea")[0].value = output;
         document.querySelector('input[type="file"]').value = null;
     }
-	document.getElementsByTagName("button")[0].onclick = () => {
-		document.getElementsByTagName("textarea")[0].select();
-		document.execCommand('copy');
+    document.getElementsByTagName("button")[0].onclick = () => {
+        document.getElementsByTagName("textarea")[0].select();
+        document.execCommand('copy');
     }
     document.getElementsByTagName("button")[1].onclick = () => {
-		location.reload();
-	}
+        location.reload();
+    }
+    document.body.ondragover = document.body.ondragenter = (e) => {
+        e.preventDefault();
+    }
+    document.body.ondrop = (e) => {
+        e.preventDefault();
+        const fileInput = document.getElementsByTagName('input')[0];
+        fileInput.files = e.dataTransfer.files;
+        fileInput.dispatchEvent(new Event('change'));
+    }
 }
