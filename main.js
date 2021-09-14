@@ -1,4 +1,4 @@
-var image;
+var image, _image;
 const addErr = (x, y, err_red, err_green, err_blue, width) => {
     const clip = (x) => (x < 0 ? 0 : (x > 255 ? 255 : x));
     const index = (x + y * width) * 4;
@@ -11,10 +11,11 @@ window.onload = () => {
     document.querySelector('input[type="file"]').onchange = async (e) => {
         const canvas = await new Promise((resolve, _) => {
             const canvas = document.createElement("canvas");
-            const image = new Image();
-            image.onload = () => {
+            const src = _image ? _image.src : null;
+            _image = new Image();
+            _image.onload = () => {
                 let width = document.querySelector('input[type="number"]').valueAsNumber;
-                let height = width * image.height / image.width;
+                let height = width * _image.height / _image.width;
                 canvas.width = width - (width % 2);
                 canvas.height = height - (height % 4);
                 const ctx = canvas.getContext("2d");
@@ -24,10 +25,14 @@ window.onload = () => {
                 ctx.webkitImageSmoothingEnabled = false;
                 ctx.msImageSmoothingEnabled = false;
                 ctx.imageSmoothingEnabled = false;
-                ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+                ctx.drawImage(_image, 0, 0, canvas.width, canvas.height);
                 resolve(canvas);
             }
-            image.src = URL.createObjectURL(e.target.files[0]);
+            if(e.target.files.length !== 0) {
+                _image.src = URL.createObjectURL(e.target.files[0]);
+            } else if (src) {
+                _image.src = src;
+            }
         });
         const shift_values = [0, 1, 2, 6, 3, 4, 5, 7];
         const width = canvas.width;
@@ -87,6 +92,9 @@ window.onload = () => {
     }
     document.getElementsByTagName("button")[1].onclick = () => {
         location.reload();
+    }
+    document.querySelector('input[type="number"]').onchange = () => {
+        document.getElementsByTagName('input')[0].dispatchEvent(new Event('change'));
     }
     const ondrag = document.getElementById("ondrag");
     ondrag.ondragover = document.body.ondragover = (e) => {
