@@ -17,7 +17,7 @@ window.onload = () => {
                 let height = width * image.height / image.width;
                 canvas.width = width - (width % 2);
                 canvas.height = height - (height % 4);
-                ctx = canvas.getContext("2d");
+                const ctx = canvas.getContext("2d");
                 ctx.fillStyle = "#FFFFFF";
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.mozImageSmoothingEnabled = false;
@@ -36,15 +36,15 @@ window.onload = () => {
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 const index = (x + y * width) * 4;
-                pixel = [image[index + 0], image[index + 1], image[index + 2]];
-                newpixel = (0.2126 * pixel[0] + 0.7152 * pixel[1] + 0.0722 * pixel[2]) > 128 ? [255, 255, 255] : [0, 0, 0];
+                const pixel = [image[index + 0], image[index + 1], image[index + 2]];
+                const newpixel = (0.2126 * pixel[0] + 0.7152 * pixel[1] + 0.0722 * pixel[2]) > 128 ? [255, 255, 255] : [0, 0, 0];
                 image[index + 0] = Math.floor(newpixel[0] + 0.5);
                 image[index + 1] = Math.floor(newpixel[1] + 0.5);
                 image[index + 2] = Math.floor(newpixel[2] + 0.5);
                 image[index + 3] = 255;
-                err_red = pixel[0] - newpixel[0];
-                err_green = pixel[1] - newpixel[1];
-                err_blue = pixel[2] - newpixel[2];
+                const err_red = pixel[0] - newpixel[0];
+                const err_green = pixel[1] - newpixel[1];
+                const err_blue = pixel[2] - newpixel[2];
                 if (x + 1 < canvas.width) addErr(x + 1, y, (7 / 16) * err_red, (7 / 16) * err_green, (7 / 16) * err_blue, width);
                 if (x - 1 > 0 && y + 1 < canvas.height) addErr(x - 1, y + 1, (3 / 16) * err_red, (3 / 16) * err_green, (3 / 16) * err_blue, width);
                 if (y + 1 < canvas.height) addErr(x, y + 1, (5 / 16) * err_red, (5 / 16) * err_green, (5 / 16) * err_blue, width);
