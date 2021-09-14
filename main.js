@@ -88,11 +88,21 @@ window.onload = () => {
     document.getElementsByTagName("button")[1].onclick = () => {
         location.reload();
     }
-    document.body.ondragover = document.body.ondragenter = (e) => {
+    const ondrag = document.getElementById("ondrag");
+    ondrag.ondragover = document.body.ondragover = (e) => {
         e.preventDefault();
     }
-    document.body.ondrop = (e) => {
+    document.body.ondragenter = (e) => {
         e.preventDefault();
+        ondrag.style.display = "grid";
+    }
+    ondrag.ondragleave = (e) => {
+        e.preventDefault();
+        ondrag.style.display = "none";
+    }
+    ondrag.ondrop = (e) => {
+        e.preventDefault();
+        ondrag.dispatchEvent(new Event('dragleave'));
         const fileInput = document.getElementsByTagName('input')[0];
         fileInput.files = e.dataTransfer.files;
         fileInput.dispatchEvent(new Event('change'));

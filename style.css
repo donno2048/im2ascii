@@ -1,10 +1,8 @@
-:not(div) {
+html, body {
     height: 100%;
 }
-:not(textarea) {
-    overflow-y: hidden;
-}
 body {
+    overflow: hidden;
     background: #333;
     color: #eee;
     margin: 0;
@@ -13,6 +11,7 @@ body {
 }
 input[type="file"] {
     color: #333;
+    pointer-events: none;
 }
 textarea {
     flex: 1 1;
@@ -39,6 +38,23 @@ textarea::-webkit-scrollbar-corner {
 #options > div {
     padding-top: 10%;
 }
+#options > div > a {
+    display: grid;
+    place-items: center;
+}
 button {
     cursor: pointer;
+}
+#ondrag {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, .3);
+    place-items: center;
+    font-size: xx-large;
+    border: thick dashed rgba(0, 0, 0, .3);
+    color:rgba(0, 0, 0, .3);
 }
