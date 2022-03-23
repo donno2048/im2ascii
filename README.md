@@ -1,5 +1,5 @@
-# im2ascii
+# im2unicode
 
-Turn Images to ascii [online](https://donno2048.github.io/im2ascii/)
+Turn Images to unicode
 
 (Supports drag and drop)
