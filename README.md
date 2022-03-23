@@ -1,5 +1,5 @@
-# im2unicode
+# im2ascii
 
-Turn Images to unicode
+Turn Images to ascii
 
 (Supports drag and drop)

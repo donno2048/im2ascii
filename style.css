@@ -18,7 +18,6 @@ textarea {
     color: white;
     background-color: #bbb;
     resize: none;
-    font-size: xx-small;
 }
 textarea::-webkit-scrollbar {
     border-radius: 10px;

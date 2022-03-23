@@ -29,11 +29,17 @@ window.onload = () => {
         const width = canvas.width;
         const height = canvas.height;
         image = new Uint8Array(canvas.getContext("2d").getImageData(0, 0, width, height).data);
-        let output = "";
+        let black_and_white = [];
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 const index = (x + y * width) * 4;
-                output += 0.3 * image[index] + 0.586 * image[index + 1] + 0.114 * image[index + 2] < 155 ? "⬛" : "⬜";
+                black_and_white += 0.3 * image[index] + 0.586 * image[index + 1] + 0.114 * image[index + 2] < 127 ? 1 : 0;
+            }
+        }
+        let output = "";
+        for (let y = 0; y < height / 4; y++) {
+            for (let x = 0; x < width / 2; x++) {
+                output += String.fromCharCode(0x2800 + [0,1,2,3].map((i) => (black_and_white[width * (i + 4 * y) + 2 * x] << i) + (black_and_white[width * (i + 4 * y) + 2 * x + 1] << (4 + i))).reduce((i, j) => i + j));
             }
             output += "\n";
         }
