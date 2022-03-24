@@ -54,6 +54,11 @@ window.onload = () => {
                 black_and_white.push(0.3 * image[index] + 0.586 * image[index + 1] + 0.114 * image[index + 2] < 127 ? 1 : 0);
             }
         }
+        if (document.getElementById("invert").checked) {
+            for (let i = 0; i < black_and_white.length; i++) {
+                black_and_white[i] = black_and_white[i] ? 0 : 1;
+            }
+        }
         let output = "";
         for (let y = 0; y < height / 3; y++) {
             for (let x = 0; x < width / 2; x++) {
@@ -72,6 +77,9 @@ window.onload = () => {
         location.reload();
     }
     document.querySelector('input[type="number"]').onchange = () => {
+        document.getElementsByTagName('input')[0].dispatchEvent(new Event('change'));
+    }
+    document.querySelector('input[type="checkbox"]').onchange = () => {
         document.getElementsByTagName('input')[0].dispatchEvent(new Event('change'));
     }
     const ondrag = document.getElementById("ondrag");
