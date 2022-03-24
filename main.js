@@ -1,4 +1,4 @@
-var image, _image;
+var _image;
 window.onload = () => {
     document.querySelector('input[type="file"]').onchange = async (e) => {
         const canvas = await new Promise((resolve, _) => {
@@ -28,18 +28,36 @@ window.onload = () => {
         });
         const width = canvas.width;
         const height = canvas.height;
-        image = new Uint8Array(canvas.getContext("2d").getImageData(0, 0, width, height).data);
+        const image = canvas.getContext("2d").getImageData(0, 0, width, height).data;
+        const crop = (x) => (x < 0 ? 0 : (x > 255 ? 255 : x));
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                const index = (x + y * width) * 4;
+                const oldpixel = [image[index], image[index + 1], image[index + 2]];
+                const newpixel = oldpixel.map((i) => i > 127 ? 255 : 0);
+                image[index + 0] = newpixel[0];
+                image[index + 1] = newpixel[1];
+                image[index + 2] = newpixel[2];
+                const quant_error = [oldpixel[0] - newpixel[0], oldpixel[1] - newpixel[1], oldpixel[2] - newpixel[2]];
+                for (let i = 0; i < 3; i++) {
+                    if (x + 1 < width)                   image[index + 4             + i] = crop(image[index + 4             + i] + 7 * quant_error[i] / 16);
+                    if (x - 1 >= 0 && y + 1 < height)    image[index - 4 + 4 * width + i] = crop(image[index - 4 + 4 * width + i] + 3 * quant_error[i] / 16);
+                    if (y + 1 < height)                  image[index     + 4 * width + i] = crop(image[index     + 4 * width + i] + 5 * quant_error[i] / 16);
+                    if (x + 1 < width && y + 1 < height) image[index + 4 + 4 * width + i] = crop(image[index + 4 + 4 * width + i] + 1 * quant_error[i] / 16);
+                }
+            }
+        }
         let black_and_white = [];
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 const index = (x + y * width) * 4;
-                black_and_white += 0.3 * image[index] + 0.586 * image[index + 1] + 0.114 * image[index + 2] < 127 ? 1 : 0;
+                black_and_white.push(0.3 * image[index] + 0.586 * image[index + 1] + 0.114 * image[index + 2] < 127 ? 1 : 0);
             }
         }
         let output = "";
-        for (let y = 0; y < height / 4; y++) {
+        for (let y = 0; y < height / 3; y++) {
             for (let x = 0; x < width / 2; x++) {
-                output += String.fromCharCode(0x2800 + [0,1,2,3].map((i) => (black_and_white[width * (i + 4 * y) + 2 * x] << i) + (black_and_white[width * (i + 4 * y) + 2 * x + 1] << (4 + i))).reduce((i, j) => i + j));
+                output += String.fromCharCode(0x2800 + ([0,1,2].map((i) => [0,1].map((j) => black_and_white[width * (i + 3 * y) + 2 * x + j] << (3 * j + i)).reduce((a, b) => a + b)).reduce((a, b) => a + b) || 1));
             }
             output += "\n";
         }
